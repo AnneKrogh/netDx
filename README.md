@@ -129,6 +129,10 @@ $ sudo apt-get install libxml2-dev xml2 # for XML & r2cytoscape
 Note: On Unix systems, installing `httr` requires a prior install of the `openssl` package. If the `openssl` install fails with a message like: `ERROR: configuration failed for package 'openssl'`, you will need to install openssl for your system. e.g. for Debian and Ubuntu, install `libssl-dev`
 
 
+## Install `modMashup`
+
+#TODO
+
 <a name="mblastoma"></a>
 ## Test functionality
 Run the medulloblastoma vignette to make sure the netDx pipeline works from end to end.
