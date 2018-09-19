@@ -152,7 +152,7 @@ sudo ln -s ~/julia_6_4/julia-9d11f62bcb/bin/julia /usr/local/bin/julia
 
 Setup repositories for installation of R packages
 ```
-echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+echo "r <- getOption('repos'); r['CRAN'] <- 'https://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
 ```
 
 Download and install most recent netDx version from https://github.com/BaderLab/netDx
