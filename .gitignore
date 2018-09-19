@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+/examples/TCGA_BRCA/*
+/examples/ModMashup/TCGA_BRCA/*
+/TCGA_BRCA/profiles/*
+/TCGA_BRCA/*
+netDxmashup/TCGA_BRCA/*

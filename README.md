@@ -131,7 +131,38 @@ Note: On Unix systems, installing `httr` requires a prior install of the `openss
 
 ## Install `modMashup`
 
-#TODO
+# TODO update install.sh script to do it for the user on installation of netDx
+
+Install libraries using apt
+```
+sudo apt-get install -y gfortran r-base openjdk-8-jre gcc zlib1g-dev libssl-dev libssh2-1-dev libcurl4-openssl-dev
+```
+
+In Ubuntu 16.04 apt-get installs julia 0.4.5, therefore download v 6.4 from https://julialang-s3.julialang.org/bin/linux/x64/0.6/julia-0.6.4-linux-x86_64.tar.gz and save it to disk
+```
+wget https://julialang-s3.julialang.org/bin/linux/x64/0.6/julia-0.6.4-linux-x86_64.tar.gz -O julia.tar.gz
+```
+
+Untar the archive and create symlink to julia executable eg
+```
+tar -zxvf julia.tar.gz
+rm julia.tar.gz
+sudo ln -s ~/julia_6_4/julia-9d11f62bcb/bin/julia /usr/local/bin/julia
+```
+
+Setup repositories for installation of R packages
+```
+echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+```
+
+Download and install most recent netDx version from https://github.com/BaderLab/netDx
+```
+$ R
+> install.packages("glmnet")
+> install.packages("netDx",type="source",repos=NULL)
+> install.packages("netDx.examples",type="source",repos=NULL)
+```
+
 
 <a name="mblastoma"></a>
 ## Test functionality
@@ -182,6 +213,15 @@ Step 3. Now, in the terminal check the value of `echo $PATH`. Make sure that `/u
 However, if you find yourself having to mess with the PATH variable, try reinstalling the [MacTex](http://tug.org/mactex/) package.
 
 <a name="brca"></a>
+
+### `ModMashup` Test functionality
+# TODO expand description and add updated Notebooks
+To test the `ModMashup` functionality follow the `ModMashup`-[Tutorial](http://memoiry.me/ModMashup.jl/dev/End-to-End_example.html#Tutorial-1) or run the example-script at `examples/ModMashup/Mashup_Breastcancer.R`.
+
+```
+cd netDx/examples/ModMashup
+Rscript Mashup_Breastcancer.R
+```
 
 <a name="other-examples"></a>
 ## Other examples
