@@ -5,11 +5,11 @@
 \title{Run nested cross-validation on data}
 \usage{
 buildPredictor(pheno, dataList, groupList, outDir, makeNetFunc,
-  featScoreMax = 10L, trainProp = 0.8, numSplits = 10L, numCores,
-  JavaMemory = 4L, featSelCutoff = 9L, keepAllData = FALSE,
-  startAt = 1L, preFilter = FALSE, preFilterSeed = 123,
-  impute = FALSE, preFilterGroups = NULL, imputeGroups = NULL,
-  logging = "default")
+  trainProp = 0.8, numSplits = 10L, useMonteCarlo = TRUE,
+  innerSplitsMC = 10L, featScoreMax = 10L, numCores, JavaMemory = 4L,
+  featSelCutoff = 9L, keepAllData = FALSE, startAt = 1L,
+  preFilter = FALSE, preFilterSeed = 123, impute = FALSE,
+  preFilterGroups = NULL, imputeGroups = NULL, logging = "default")
 }
 \arguments{
 \item{pheno}{(data.frame) sample metadata, must have ID and STATUS columns}
@@ -33,12 +33,19 @@ directory exists, its contents will be overwritten}
 \item{makeNetFunc}{(function) user-defined function for creating the set
 of input PSN provided to netDx. See createPSN_MultiData()::customFunc.}
 
-\item{featScoreMax}{(integer) number of CV folds in inner loop}
-
 \item{trainProp}{(numeric 0 to 1) Percent samples to use for training}
 
 \item{numSplits}{(integer) number of train/blind test splits 
 (i.e. iterations of outer loop)}
+
+\item{useMonteCarlo}{(logical) if TRUE use Monte Carlo for resampling
+and if FALSE use cross-validation in inner loop}
+
+\item{innerSplitsMC}{(integer) Number of splits in Monte Carlo resampling in inner loop}
+
+\item{featScoreMax}{(integer) determine size of training ((featScoreMax-1)/featScoreMax)
+and test (1/featScoreMax) splits in inner loop. If CV is used for resampling featureScoreMax
+is the number of folds in inner loop}
 
 \item{numCores}{(integer) number of CPU cores for parallel processing}
 

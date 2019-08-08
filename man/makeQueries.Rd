@@ -5,18 +5,25 @@
 \title{Randomly select patients for queries for feature selection}
 \usage{
 makeQueries(incPat, featScoreMax = 10L, setSeed = 42L,
-  verbose = TRUE)
+  verbose = TRUE, useMonteCarlo = TRUE, nrOfSplits = 10L)
 }
 \arguments{
 \item{incPat}{(char) vector of patient IDs to be included in query}
 
-\item{featScoreMax}{(integer) Number of times to run query, usually equal to the max 
-score for features in the design (e.g. if featScoreMax=10, then this value is 10).}
+\item{featScoreMax}{(integer) determine size of training ((featScoreMax-1)/featScoreMax)
+and test (1/featScoreMax) splits. In cross-validation featScoreMax is also the number of
+Number of times to run query, usually equal to the max score for features in 
+the design (e.g. if featScoreMax=10, then this value is 10).}
 
 \item{setSeed}{(integer) Set this to an integer to make results
 reproducible. If NULL, seed is not explicitly set.}
 
 \item{verbose}{(logical) print messages}
+
+\item{useMonteCarlo}{(logical) if TRUE use Monte Carlo for resampling
+and if FALSE use cross-validation}
+
+\item{nrOfSplits}{(integer) Number of times to run query in Monte Carlo resampling}
 }
 \value{
 (list) of length \code{featScoreMax}, containing names of patients in

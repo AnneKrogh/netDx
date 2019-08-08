@@ -6,7 +6,8 @@
 \usage{
 runFeatureSelection(trainID_pred, outDir, dbPath, numTrainSamps = NULL,
   incNets = "all", orgName = "predictor", fileSfx = "CV",
-  verbose = FALSE, numCores = 2L, JavaMemory = 6L,
+  verbose = FALSE, useMonteCarlo = TRUE, featScoreMax = 10L,
+  nrOfSplits = 10L, numCores = 2L, JavaMemory = 6L,
   seed_queryResample = 42L, verbose_runQuery = FALSE, ...)
 }
 \arguments{
@@ -30,6 +31,16 @@ The default value will likely never need to be changed.}
 \item{fileSfx}{(char) file suffix}
 
 \item{verbose}{(logical) print messages}
+
+\item{useMonteCarlo}{(logical) if TRUE use Monte Carlo for resampling
+and if FALSE use cross-validation}
+
+\item{featScoreMax}{(integer) determine size of training ((featScoreMax-1)/featScoreMax)
+and test (1/featScoreMax) splits. In cross-validation featScoreMax is also the number of
+Number of times to run query, usually equal to the max score for features in
+the design (e.g. if featScoreMax=10, then this value is 10).}
+
+\item{nrOfSplits}{(integer) Number of times to run query in Monte Carlo resampling}
 
 \item{numCores}{(logical) num parallel threads for cross-validation}
 

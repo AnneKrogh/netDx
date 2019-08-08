@@ -14,6 +14,13 @@
 #' The default value will likely never need to be changed.
 #' @param fileSfx (char) file suffix
 #' @param verbose (logical) print messages
+#' @param useMonteCarlo (logical) if TRUE use Monte Carlo for resampling
+#'      and if FALSE use cross-validation
+#' @param nrOfSplits (integer) Number of times to run query in Monte Carlo resampling
+#' @param featScoreMax (integer) determine size of training ((featScoreMax-1)/featScoreMax)
+#' and test (1/featScoreMax) splits. In cross-validation featScoreMax is also the number of
+#' Number of times to run query, usually equal to the max score for features in
+#' the design (e.g. if featScoreMax=10, then this value is 10).
 #' @param numCores (logical) num parallel threads for cross-validation
 #' @param JavaMemory (integer) memory for GeneMANIA run, in Gb.
 #' @param seed_queryResample (integer) RNG seed for inner cross validation loop.
@@ -30,6 +37,7 @@
 #' @export
 runFeatureSelection <- function(trainID_pred,outDir,dbPath,numTrainSamps = NULL,
 	incNets="all",orgName="predictor",fileSfx="CV",verbose=FALSE,
+	useMonteCarlo=TRUE,featScoreMax=10L,nrOfSplits=10L,
 	numCores=2L,JavaMemory=6L,seed_queryResample=42L,
 	verbose_runQuery=FALSE,...) {
 
@@ -39,6 +47,7 @@ runFeatureSelection <- function(trainID_pred,outDir,dbPath,numTrainSamps = NULL,
 	# get query names
 	if (verbose) cat("\tWriting queries:\n")
 	qSamps <- makeQueries(trainID_pred,verbose=verbose,
+		useMonteCarlo=useMonteCarlo,nrOfSplits=nrOfSplits,featScoreMax=featScoreMax,
 		setSeed=seed_queryResample,...)
 
 	# write query files

@@ -31,7 +31,12 @@
 #' @param outDir (char) directory where results will be stored. If this 
 #' directory exists, its contents will be overwritten
 #' @param trainProp (numeric 0 to 1) Percent samples to use for training
-#' @param featScoreMax (integer) number of CV folds in inner loop
+#' @param useMonteCarlo (logical) if TRUE use Monte Carlo for resampling
+#'      and if FALSE use cross-validation in inner loop
+#' @param innerSplitsMC (integer) Number of splits in Monte Carlo resampling in inner loop
+#' @param featScoreMax (integer) determine size of training ((featScoreMax-1)/featScoreMax)
+#' and test (1/featScoreMax) splits in inner loop. If CV is used for resampling featureScoreMax
+#' is the number of folds in inner loop
 #' @param numSplits (integer) number of train/blind test splits 
 #' (i.e. iterations of outer loop)
 #' @param numCores (integer) number of CPU cores for parallel processing
@@ -115,8 +120,9 @@
 #' #   outDir=sprintf("%s/pred_output",getwd()), ## absolute path
 #' #   numCores=1L,featScoreMax=2L, featSelCutoff=1L,numSplits=2L)
 buildPredictor <- function(pheno,dataList,groupList,outDir,makeNetFunc,
-	featScoreMax=10L,trainProp=0.8,numSplits=10L,numCores,
-	JavaMemory=4L,featSelCutoff=9L,
+	trainProp=0.8,numSplits=10L,
+        useMonteCarlo=TRUE,innerSplitsMC=10L,featScoreMax=10L,
+        numCores,JavaMemory=4L,featSelCutoff=9L,
 	keepAllData=FALSE,startAt=1L, preFilter=FALSE,preFilterSeed=123,
 	impute=FALSE,
 	preFilterGroups=NULL, imputeGroups=NULL,
@@ -126,7 +132,7 @@ verbose_default <- TRUE
 verbose_runQuery <- FALSE	  # messages when running individual queries
 verbose_compileNets <- FALSE  # message when compiling PSN into database
 verbose_runFS <- TRUE		  # runFeatureSelection() 
-verbose_predict <- FALSE
+verbose_predict <- TRUE
 verbose_compileFS <- FALSE
 verbose_makeFeatures <- FALSE
 
@@ -258,7 +264,8 @@ for (rngNum in startAt:numSplits) {
 			tmp <- pheno[which(pheno$ID %in% colnames(newx)),]
 			tryCatch( {
 			fit <- cv.glmnet(x=t(newx),
-					y=factor(tmp$STATUS), family="binomial", alpha=1) # lasso
+					y=factor(tmp$STATUS), family="binomial", 
+					alpha=1,maxit=1000000) # lasso
 			}, error=function(ex) {
 				print(ex)
 				cat("*** You may need to set impute=TRUE for prefiltering ***\n")
@@ -314,7 +321,8 @@ for (rngNum in startAt:numSplits) {
 			cat(sprintf("\tScoring features\n"))
 			runFeatureSelection(trainPred, 
 				outDir=resDir, dbPath=dbDir$dbDir, 
-				nrow(pheno_subtype),verbose=verbose_runFS, 
+				nrow(pheno_subtype),verbose=verbose_runFS,
+				useMonteCarlo=useMonteCarlo,nrOfSplits=innerSplitsMC,
 				numCores=numCores, verbose_runQuery=TRUE, # verbose_runQuery,
 				featScoreMax=featScoreMax,JavaMemory=JavaMemory)
 	
